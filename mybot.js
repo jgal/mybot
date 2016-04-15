@@ -76,4 +76,57 @@ controller.hears(['i ship (.*) and (.*)'], 'message_received', function(bot, mes
     });
 });
 
+controller.hears(['what\'s your name?'], 'message_received', function(bot, message) {
+    bot.startConversation(message, function(err, convo) {
+        if (!err) {
+
+            controller.storage.users.get(message.user, function(err, user) {
+                if (!user) {
+                    user = {
+                        id: message.user,
+                    };
+                }
+                if (user && user.name) {
+                    convo.say("My name is Jankabot, " + user.name + "!");
+                } else {
+                    convo.say("My name is Jankabot");
+                    convo.ask('What\'s your name?', [
+                        {
+                            pattern: 'janka',
+                            callback: function(response, convo) {
+                                // since no further messages are queued after this,
+                                // the conversation will end naturally with status == 'completed'
+                                convo.say("you da best babe");
+                                user.name = response.text
+                                convo.next();
+                            }
+    
+                        },
+                        {
+                            pattern: 'christina',
+                            callback: function(response, convo) {
+                                convo.say("omg will you marry me?");
+                                user.name = response.text
+                                convo.next();
+                            }
+                        },
+                        {
+                            default: true,
+                            callback: function(response, convo) {
+                                convo.say("nice to meet you, " + response.text);
+                                user.name = response.text
+                                convo.next();
+                            }
+                        }
+                    ]);
+                    controller.storage.users.save(user, function(err, id) {});
+                } 
+            });
+
+            
+
+        }
+    });
+});
+
 
