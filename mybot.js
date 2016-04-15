@@ -39,12 +39,12 @@ controller.hears(['hello'], 'message_received', function(bot, message) {
     });
 });
 
-controller.hears(['I love you', 'i love you'], 'message_received', function(bot, message) {
+controller.hears(['do you love me?', 'i love you'], 'message_received', function(bot, message) {
 
 
     controller.storage.users.get(message.user, function(err, user) {
         if (user && user.name) {
-            bot.reply(message, 'I love you, too, ' + user.name + ' <3');
+            bot.reply(message, 'I love you, ' + user.name + ' <3');
         } else {
             bot.reply(message, 'I don\'t know you well enough to love you.');
         }
