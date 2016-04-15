@@ -27,7 +27,7 @@ controller.setupWebserver(process.env.port || 3000, function(err, webserver) {
     });
 });
 
-controller.hears(['hello', 'hi'], 'message_received', function(bot, message) {
+controller.hears(['hello'], 'message_received', function(bot, message) {
 
 
     controller.storage.users.get(message.user, function(err, user) {
@@ -63,6 +63,16 @@ controller.hears(['call me (.*)', 'my name is (.*)'], 'message_received', functi
         controller.storage.users.save(user, function(err, id) {
             bot.reply(message, 'Got it. I will call you ' + user.name + ' from now on.');
         });
+    });
+});
+
+controller.hears(['i ship (.*) and (.*)'], 'message_received', function(bot, message) {
+    var first = message.match[1]
+    var second = message.match[2]
+    var shipName = first.substring(0, Math.ceil(first.length / 2)) + second.substring(second.length / 2, second.length)
+
+    controller.storage.users.get(message.user, function(err, user) {
+        bot.reply(message, '#' + shipName);
     });
 });
 
