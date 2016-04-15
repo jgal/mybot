@@ -151,4 +151,13 @@ controller.hears(['what\'s your name?'], 'message_received', function(bot, messa
     });
 });
 
+controller.hears(['thanks', 'thank you', 'thx'], 'message_received', function(bot, message) {
+    bot.reply(message, 'you\'re welcome');
+});
+
+controller.on('message_received', function(bot, message) {
+    bot.reply(message, 'lol');
+    return false;
+});
+
 
