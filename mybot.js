@@ -79,7 +79,6 @@ controller.hears(['i ship (.*) and (.*)'], 'message_received', function(bot, mes
 controller.hears(['what\'s your name?'], 'message_received', function(bot, message) {
     bot.startConversation(message, function(err, convo) {
         if (!err) {
-
             controller.storage.users.get(message.user, function(err, user) {
                 if (!user) {
                     user = {
@@ -144,15 +143,61 @@ controller.hears(['what\'s your name?'], 'message_received', function(bot, messa
                     controller.storage.users.save(user, function(err, id) {});
                 } 
             });
-
-            
-
         }
     });
 });
 
 controller.hears(['thanks', 'thank you', 'thx'], 'message_received', function(bot, message) {
     bot.reply(message, 'you\'re welcome');
+});
+
+controller.hears(['what\'s up'], message_received, function(bot, message) {
+    var responses = ['not much', 'the sky', 'today\'s been really busy', 'space']
+
+    bot.startConversation(message, function(err, convo) {
+        if(!err) {
+            convo.say(responses[Math.floor((Math.random() * responses.length) + 1)]);
+            convo.ask('what\'s up with you?', [
+                
+                    pattern: ['not much', 'nm'],
+                    callback: function(response, convo) {
+                        convo.say("boring");
+                        convo.next();
+                    },
+                    {
+                        default: true,
+                        callback: function(response, convo) {
+                            convo.say("cool cool");
+                            convo.next();
+                        }
+                    }
+
+                
+            ]);
+
+        }
+    });
+});
+
+controller.hears(['how are you', 'how\'s it going'], message_received, function(bot, message) {
+    var responses = ['pretty good', 'good', 'bad', 'not good', 'great', 'great!', 'fantastic', 
+    'fantastic!', 'amazing', 'amazing!', 'sigh'];
+
+    bot.startConversation(message, function(err, convo) {
+        if(!err) {
+            convo.say(responses[Math.floor((Math.random() * responses.length) + 1)]);
+            convo.ask('how are you?', [
+                {
+                    default: true,
+                    callback: function(response, convo) {
+                        convo.say("<3");
+                        convo.next();
+                    }
+                }
+            ]);
+
+        }
+    });
 });
 
 controller.on('message_received', function(bot, message) {
