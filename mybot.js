@@ -105,8 +105,30 @@ controller.hears(['what\'s your name?'], 'message_received', function(bot, messa
                         {
                             pattern: 'christina',
                             callback: function(response, convo) {
-                                convo.say("omg will you marry me?");
                                 user.name = response.text
+                                convo.ask("omg will you marry me?", [
+                                    {
+                                        pattern: 'yes',
+                                        callback: function(response, convo) {
+                                            convo.say("OMG YAY");
+                                            convo.next();
+                                        }
+                                    },
+                                    {
+                                        pattern: 'no',
+                                        callback: function(response, convo) {
+                                            convo.say("cries forever");
+                                            convo.next();
+                                        }
+                                    },
+                                    {
+                                        default: true,
+                                        callback: function(response, convo) {
+                                            convo.next();
+                                        }
+                                    }
+                                ]);
+                                
                                 convo.next();
                             }
                         },
