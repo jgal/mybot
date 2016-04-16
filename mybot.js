@@ -102,30 +102,30 @@ controller.hears(['what\'s your name?'], 'message_received', function(bot, messa
     
                         },
                         {
-                            pattern: 'christina',
-                            callback: function(response, convo) {
-                                user.name = response.text
-                                convo.ask("omg will you marry me?", [
-                                    {
-                                        pattern: 'yes',
-                                        callback: function(response, convo) {
-                                            convo.say("OMG YAY");
-                                            convo.next();
+                                pattern: 'christina',
+                                callback: function(response, convo) {
+                                    user.name = response.text
+                                    convo.ask("omg will you marry me?", [
+                                        {
+                                            pattern: 'yes',
+                                            callback: function(response, convo) {
+                                                convo.say("OMG YAY");
+                                                convo.next();
+                                            }
+                                        },
+                                        {
+                                            pattern: 'no',
+                                            callback: function(response, convo) {
+                                                convo.say("cries forever");
+                                                convo.next();
+                                            }
+                                        },
+                                        {
+                                            default: true,
+                                            callback: function(response, convo) {
+                                                convo.next();
+                                            }
                                         }
-                                    },
-                                    {
-                                        pattern: 'no',
-                                        callback: function(response, convo) {
-                                            convo.say("cries forever");
-                                            convo.next();
-                                        }
-                                    },
-                                    {
-                                        default: true,
-                                        callback: function(response, convo) {
-                                            convo.next();
-                                        }
-                                    }
                                 ]);
                                 
                                 convo.next();
@@ -151,18 +151,19 @@ controller.hears(['thanks', 'thank you', 'thx'], 'message_received', function(bo
     bot.reply(message, 'you\'re welcome');
 });
 
-controller.hears(['what\'s up'], message_received, function(bot, message) {
+controller.hears(['what\'s up'], 'message_received', function(bot, message) {
     var responses = ['not much', 'the sky', 'today\'s been really busy', 'space']
 
     bot.startConversation(message, function(err, convo) {
-        if(!err) {
+        if(!err) {  
             convo.say(responses[Math.floor((Math.random() * responses.length) + 1)]);
             convo.ask('what\'s up with you?', [
-                
-                    pattern: ['not much', 'nm'],
-                    callback: function(response, convo) {
-                        convo.say("boring");
-                        convo.next();
+                    {
+                        pattern: 'not much',
+                        callback: function(response, convo) {
+                            convo.say("boring");
+                            convo.next();
+                        }
                     },
                     {
                         default: true,
@@ -179,7 +180,7 @@ controller.hears(['what\'s up'], message_received, function(bot, message) {
     });
 });
 
-controller.hears(['how are you', 'how\'s it going'], message_received, function(bot, message) {
+controller.hears(['how are you', 'how\'s it going'], 'message_received', function(bot, message) {
     var responses = ['pretty good', 'good', 'bad', 'not good', 'great', 'great!', 'fantastic', 
     'fantastic!', 'amazing', 'amazing!', 'sigh'];
 
@@ -199,6 +200,12 @@ controller.hears(['how are you', 'how\'s it going'], message_received, function(
         }
     });
 });
+
+controller.hears('sigh', 'message_received', function(bot, message) {
+    bot.reply(message, "sigh");
+});
+
+
 
 controller.on('message_received', function(bot, message) {
     bot.reply(message, 'lol');
